@@ -5,7 +5,7 @@ const loadData = async (tools,isShow) => {
         const data = await res.json();
         const info = data.data.tools
 
-        console.log(data.data.tools[0]);
+        // console.log(data.data.tools[0]);
         
         if (isShow === 'sort') {
 
@@ -54,7 +54,7 @@ const displayData = (info,isShow) => {
     
     
 
-    console.log(info);
+    // console.log(info);
 
     let pContainer = document.getElementById('container');
 
@@ -141,15 +141,24 @@ const sortByDate = () => {
 
 
 const displayModal = async (id) => {
-      console.log(id);
+      // console.log(id);
 
       const res = await fetch(
         `https://openapi.programming-hero.com/api/ai/tool/${id}`
       );
         const data = await res.json();
-        console.log(data.data);
+
+        // console.log(data.data.description);
+
+        
+
+        let info = data.data;
+
+        // console.log(info.input_output_examples[0].input);
 
       const modalContainer = document.getElementById('modal-container');
+       
+      modalContainer.textContent = ''
 
       const div = document.createElement('div');
 
@@ -165,23 +174,29 @@ const displayModal = async (id) => {
             <div class="flex flex-col lg:flex-row">
               <div class="flex-1 space-y-6 border border-rose-600 p-6 rounded-md lg:mr-7">
                 <p class="font-bold">
-                  ChatGPT is an AI-powered chatbot platform that uses OpenAI's
-                  GPT technology to simulate human conversation.
+                  ${info.description}
                 </p>
 
                 <div class="flex justify-between">
-                  <p class="font-bold text-amber-600">$10/month Basic</p>
-                  <p class="font-bold text-pink-600">$50/month Pro</p>
-                  <p class="font-bold text-blue-700">Contact us Enterprise</p>
+                  <p class="font-bold text-amber-600">${
+                    info?.pricing[0]?.price
+                  } ${info?.pricing[0]?.plan}</p>
+                  <p class="font-bold text-pink-600">${
+                    info?.pricing[1]?.price
+                  } ${info?.pricing[1]?.plan}</p>
+                  <p class="font-bold text-blue-700">${
+                    info?.pricing[2]?.price
+                  } ${info?.pricing[2]?.plan}</p>
                 </div>
                  
                   <div class="flex justify-between">
                       <div>
                          <h1 class="font-bold">Features</h1>
                          <ul class="list-disc">
-                          <li>Customizable responses</li>
-                          <li>Customizable responses</li>
-                          <li>Customizable responses</li>
+                          <li>${info.features["1"].feature_name}</li>
+                          <li>${info.features["2"].feature_name}</li>
+                          <li>${info.features["3"].feature_name}</li>
+                          
                          </ul>
 
                       </div>
@@ -189,9 +204,10 @@ const displayModal = async (id) => {
                       <div>
                         <h2 class="font-bold">Integrations</h2>
                         <ul class="list-disc">
-                          <li>Fb messenger</li>
-                          <li>Telegram</li>
-                          <li>Telegram</li>
+                          <li>${info.integrations[0]}</li>
+                          <li>${info.integrations[1]}</li>
+                          <li>${info.integrations[2]}</li>
+                          
                         </ul>
 
                       </div>
@@ -200,11 +216,17 @@ const displayModal = async (id) => {
 
               <div class="flex-1">
                   <div class="relative">
-                    <img src="./demo.jpg" alt="">
-                     <p class="bg-red-500 p-3 rounded-md absolute top-2 right-2 text-white">94% accuracy</p>
+                    <img class="rounded-md" src="${info.image_link[0]}" alt="">
+                     <p class="bg-red-500 p-3 rounded-md absolute top-2 right-2 text-white"> <span>${
+                       info.accuracy.score * 100
+                     }</span>% accuracy</p>
                   </div>
-                  <h1 class="font-bold text-center mt-3">Hi, how are you doing today?</h1>
-                  <p class="text-center">I'm doing well, thank you for asking. How can I assist you today?</p>
+                  <h1 class="font-bold text-center mt-3">${
+                    info.input_output_examples[0].input
+                  }</h1>
+                  <p class="text-center">${
+                    info.input_output_examples[0].output
+                  }</p>
               </div>
             </div>
           </form>
@@ -218,7 +240,7 @@ const displayModal = async (id) => {
   const modalId = document.getElementById("my_modal_3");
   modalId.showModal();
 
-
+  
 
 }
 
