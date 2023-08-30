@@ -26,7 +26,7 @@ const loadData = async (tools,isShow) => {
             info.sort((first, second) => {
                 
                
-                return (first.published_in - second.published_in)
+                return ( second.published_in -first.published_in)
             });
 
 
@@ -71,10 +71,11 @@ const displayData = (info,isShow) => {
     if (!isShow) {
         info = info.slice(0, 6);
     }
-     const arr = [];
+    
+
     pContainer.textContent = ''
     info.forEach(element => {
-        arr.push(element.published_in)
+        
     
         let div = document.createElement("div");
          
@@ -109,7 +110,7 @@ const displayData = (info,isShow) => {
                      </div>
                     </div>
                    <div>
-                    <i class="fa-solid fa-arrow-right cursor-pointer"></i>
+                    <i onclick="displayModal('${element.id}')" class="fa-solid fa-arrow-right cursor-pointer"></i>
                    </div>
               </div>
             </div>
@@ -119,7 +120,7 @@ const displayData = (info,isShow) => {
         pContainer.appendChild(div);
     });
 
-     console.log(arr)
+    
 }
 
 
@@ -138,6 +139,88 @@ const sortByDate = () => {
 }
 
 
+
+const displayModal = async (id) => {
+      console.log(id);
+
+      const res = await fetch(
+        `https://openapi.programming-hero.com/api/ai/tool/${id}`
+      );
+        const data = await res.json();
+        console.log(data.data);
+
+      const modalContainer = document.getElementById('modal-container');
+
+      const div = document.createElement('div');
+
+      div.innerHTML = `
+      
+      <dialog id="my_modal_3" class="w-3/4">
+          <form method="dialog" class="bg-slate-400 p-28 rounded-md">
+            <button
+              class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+            <div class="flex flex-col lg:flex-row">
+              <div class="flex-1 space-y-6 border border-rose-600 p-6 rounded-md lg:mr-7">
+                <p class="font-bold">
+                  ChatGPT is an AI-powered chatbot platform that uses OpenAI's
+                  GPT technology to simulate human conversation.
+                </p>
+
+                <div class="flex justify-between">
+                  <p class="font-bold text-amber-600">$10/month Basic</p>
+                  <p class="font-bold text-pink-600">$50/month Pro</p>
+                  <p class="font-bold text-blue-700">Contact us Enterprise</p>
+                </div>
+                 
+                  <div class="flex justify-between">
+                      <div>
+                         <h1 class="font-bold">Features</h1>
+                         <ul class="list-disc">
+                          <li>Customizable responses</li>
+                          <li>Customizable responses</li>
+                          <li>Customizable responses</li>
+                         </ul>
+
+                      </div>
+                       
+                      <div>
+                        <h2 class="font-bold">Integrations</h2>
+                        <ul class="list-disc">
+                          <li>Fb messenger</li>
+                          <li>Telegram</li>
+                          <li>Telegram</li>
+                        </ul>
+
+                      </div>
+                  </div>
+              </div>
+
+              <div class="flex-1">
+                  <div class="relative">
+                    <img src="./demo.jpg" alt="">
+                     <p class="bg-red-500 p-3 rounded-md absolute top-2 right-2 text-white">94% accuracy</p>
+                  </div>
+                  <h1 class="font-bold text-center mt-3">Hi, how are you doing today?</h1>
+                  <p class="text-center">I'm doing well, thank you for asking. How can I assist you today?</p>
+              </div>
+            </div>
+          </form>
+        </dialog>
+      
+      
+      `;
+
+      modalContainer.appendChild(div)
+
+  const modalId = document.getElementById("my_modal_3");
+  modalId.showModal();
+
+
+
+}
 
 
 loadData('tools');
